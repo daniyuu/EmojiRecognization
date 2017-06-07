@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+
+    <title>React App - Analysis an Image Sample</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+
+  </head>
+  <body>
+  <script type="text/javascript">
+      $(function() {
+          var params = {
+              "language": "zh-Hans",
+              "detectOrientation ": "true",
+          };
+
+          $.ajax({
+              // NOTE: You must use the same location in your REST call as you used to obtain your subscription keys.
+              //   For example, if you obtained your subscription keys from westus, replace "westcentralus" in the
+              //   URL below with "westus".
+              url: "https://westcentralus.api.cognitive.microsoft.com/vision/v1.0/ocr?" + $.param(params),
+
+              beforeSend: function(xhrObj){
+                  // Request headers
+                  xhrObj.setRequestHeader("Content-Type","application/json");
+
+                  // NOTE: Replace the "Ocp-Apim-Subscription-Key" value with a valid subscription key.
+                  xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "d1aa9018f9584282a979a2ae5dc89b0c");
+              },
+
+              type: "POST",
+
+              // Request body
+              data: '{"url": "http://pics.sc.chinaz.com/Files/pic/faces/3574/00.jpg"}',
+          })
+
+              .done(function(data) {
+                  // Show formatted JSON on webpage.
+                  $("#responseTextArea").val(JSON.stringify(data, null, 2));
+              })
+
+              .fail(function(jqXHR, textStatus, errorThrown) {
+                  // Display error message.
+                  var errorString = (errorThrown === "") ? "Error. " : errorThrown + " (" + jqXHR.status + "): ";
+                  errorString += (jqXHR.responseText === "") ? "" : jQuery.parseJSON(jqXHR.responseText).message;
+                  alert(errorString);
+              });
+      });
+  </script>
+
+  REST response:
+  <br><br>
+  <textarea id="responseTextArea" class="UIInput" cols="120" rows="32"></textarea>
+
+  </body>
+</html>
