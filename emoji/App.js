@@ -7,17 +7,18 @@ import {
     Image
 } from 'react-native';
 
+import AppInfo from './AppInfo';
+
 var imgURL = "http://www.hrewqrewqangge.com/blog/images/logo.png";
 
 export default class App extends React.Component {
     getImgDescription(){
-        var SubscriptionKey = 'd1aa9018f9584282a979a2ae5dc89b0c';
         var imgPath = "http://wx4.sinaimg.cn/large/62528dc5gy1ff15pgorhgj20rs0rsn1e.jpg";
         fetch("https://westcentralus.api.cognitive.microsoft.com/vision/v1.0/ocr?language=zh-Hans", {
             method: 'POST',
             headers:{
                 'Content-Type': 'application/json',
-                'Ocp-Apim-Subscription-Key': SubscriptionKey
+                'Ocp-Apim-Subscription-Key': AppInfo.SubscriptionKey
             },
             body: JSON.stringify({'url': imgPath})
         })
