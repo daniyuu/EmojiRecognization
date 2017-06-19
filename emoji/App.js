@@ -11,6 +11,20 @@ var imgURL = "http://www.hrewqrewqangge.com/blog/images/logo.png";
 
 export default class App extends React.Component {
     getImgDescription(){
+        var SubscriptionKey = 'd1aa9018f9584282a979a2ae5dc89b0c';
+        var imgPath = "http://wx4.sinaimg.cn/large/62528dc5gy1ff15pgorhgj20rs0rsn1e.jpg";
+        fetch("https://westcentralus.api.cognitive.microsoft.com/vision/v1.0/ocr?language=zh-Hans", {
+            method: 'POST',
+            headers:{
+                'Content-Type': 'application/json',
+                'Ocp-Apim-Subscription-Key': SubscriptionKey
+            },
+            body: JSON.stringify({'url': imgPath})
+        })
+            .then((response)=>response.json())
+            .then((responseData)=>{
+            alert(JSON.stringify(responseData))
+            })
 
     }
 
@@ -34,6 +48,7 @@ export default class App extends React.Component {
                 <View>
                     <Text onPress={this.saveImg.bind(this, imgURL)} style={[styles.saveImg]}></Text>
                 </View>
+                <Text onPress={this.getImgDescription.bind(this)}>GetImgDescription</Text>
             </View>
 
         );
