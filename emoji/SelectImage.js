@@ -9,18 +9,9 @@ export default class SelectImage extends React.Component {
     state = {
         avatarSource: null,
         videoSource: null
-    };s
+    };
 
     selectPhotoTapped() {
-        const options = {
-            quality: 1.0,
-            maxWidth: 500,
-            maxHeight: 500,
-            storageOptions: {
-                skipBackup: true
-            }
-        };
-
         CameraRoll.getPhotos({
             first: 2,
             assetType: 'All'
@@ -40,19 +31,13 @@ export default class SelectImage extends React.Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <View>
                 <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
                     <View style={[styles.avatar, styles.avatarContainer, {marginBottom: 20}]}>
                         {
                             this.state.avatarSource === null ? <Text>Select a photo</Text> :
                                 <Image style={styles.avatar} source={this.state.avatarSource}/>
                         }
-                    </View>
-                </TouchableOpacity>
-
-                <TouchableOpacity>
-                    <View style={[styles.avatar, styles.avatarContainer]}>
-                        <Text>Select a video</Text>
                     </View>
                 </TouchableOpacity>
             </View>

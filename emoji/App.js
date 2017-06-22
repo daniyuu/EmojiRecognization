@@ -39,7 +39,6 @@ export default class App extends React.Component {
             <View style={styles.container}>
                 <Text onPress={this.getImgDescription.bind(this)}>GetImgDescription</Text>
                 <SelectImage/>
-                <SearchBar/>
             </View>
 
         );
