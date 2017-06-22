@@ -22,8 +22,9 @@
     "expo": "^17.0.0",
     "react": "16.0.0-alpha.6",
     "react-native": "^0.44.0",
-    "react-native-fetch-blob": "^0.10.5",
-    "react-native-image-picker": "^0.26.3",
+    "react-native-image-crop-picker": "^0.13.1",
+    "react-native-local-mongodb": "^1.8.2",
+    "react-native-search-box": "0.0.9",
     "react-native-share": "^1.0.20",
     "react-navigation": "^1.0.0-beta.11"
   }

@@ -3,3 +3,4 @@ emoji/.idea
 .DS_Store
 npm-debug.log
 AppInfo.js
+node_modules

@@ -1,30 +1,25 @@
-import React from 'react';
-import {
-    StyleSheet,
-    Text,
-    View,
-    CameraRoll,
-    Image
-} from 'react-native';
+import React from "react";
+import {CameraRoll, StyleSheet, Text, View} from "react-native";
 
-import AppInfo from './AppInfo';
+import AppInfo from "./AppInfo";
+import SelectImage from "./SelectImage";
 
 var imgURL = "http://www.hrewqrewqangge.com/blog/images/logo.png";
 
 export default class App extends React.Component {
-    getImgDescription(){
+    getImgDescription() {
         var imgPath = "http://wx4.sinaimg.cn/large/62528dc5gy1ff15pgorhgj20rs0rsn1e.jpg";
         fetch("https://westcentralus.api.cognitive.microsoft.com/vision/v1.0/ocr?language=zh-Hans", {
             method: 'POST',
-            headers:{
+            headers: {
                 'Content-Type': 'application/json',
                 'Ocp-Apim-Subscription-Key': AppInfo.SubscriptionKey
             },
             body: JSON.stringify({'url': imgPath})
         })
-            .then((response)=>response.json())
-            .then((responseData)=>{
-            alert(JSON.stringify(responseData))
+            .then((response) => response.json())
+            .then((responseData) => {
+                alert(JSON.stringify(responseData))
             })
 
     }
@@ -42,14 +37,9 @@ export default class App extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text>Hello</Text>
-                <Image style={styles.img}
-                       source={{uri:imgURL}}
-                       resizeMode="contain"/>
-                <View>
-                    <Text onPress={this.saveImg.bind(this, imgURL)} style={[styles.saveImg]}></Text>
-                </View>
                 <Text onPress={this.getImgDescription.bind(this)}>GetImgDescription</Text>
+                <SelectImage/>
+                <SearchBar/>
             </View>
 
         );
