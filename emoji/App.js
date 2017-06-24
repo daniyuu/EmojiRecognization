@@ -1,14 +1,16 @@
 import React from "react";
-import {CameraRoll, StyleSheet, Text, View} from "react-native";
+import {CameraRoll, Image, StyleSheet, Text, View} from "react-native";
 
 import AppInfo from "./AppInfo";
 import SelectImage from "./SelectImage";
+import base64 from "base-64";
 
 var imgURL = "http://www.hrewqrewqangge.com/blog/images/logo.png";
 
 export default class App extends React.Component {
     getImgDescription() {
-        var imgPath = "http://wx4.sinaimg.cn/large/62528dc5gy1ff15pgorhgj20rs0rsn1e.jpg";
+        // var imgPath = "http://wx4.sinaimg.cn/large/62528dc5gy1ff15pgorhgj20rs0rsn1e.jpg";
+        var imgPath = "assets-library://asset/asset.JPG?id=00000000-0000-0000-0000-000000000415&ext=JPG";
         fetch("https://westcentralus.api.cognitive.microsoft.com/vision/v1.0/ocr?language=zh-Hans", {
             method: 'POST',
             headers: {
@@ -19,7 +21,9 @@ export default class App extends React.Component {
         })
             .then((response) => response.json())
             .then((responseData) => {
-                alert(JSON.stringify(responseData))
+                alert(JSON.stringify(responseData));
+                console.info(base64.encode(imgPath));
+
             })
 
     }
@@ -39,6 +43,9 @@ export default class App extends React.Component {
             <View style={styles.container}>
                 <Text onPress={this.getImgDescription.bind(this)}>GetImgDescription</Text>
                 <SelectImage/>
+                <Image style={{width: 100, height: 100}}
+                       source={{uri: 'assets-library://asset/asset.JPG?id=00000000-0000-0000-0000-000000000415&ext=JPG'}}/>
+
             </View>
 
         );
