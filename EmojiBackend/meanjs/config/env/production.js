@@ -14,7 +14,7 @@ module.exports = {
   // Binding to 127.0.0.1 is safer in production.
   host: process.env.HOST || '0.0.0.0',
   db: {
-    uri: 'mongodb://' + appInfo.cosmosdb_name + ':' + appInfo.primaryMasterKey + '@' + appInfo.cosmosdb_name + '.documents.azure.com:10255/' + appInfo.documentName + '?ssl=true&sslverifycertificate=false',
+    uri: process.env.MONGODB_URI || 'mongodb://' + appInfo.cosmosdb_name + ':' + appInfo.primaryMasterKey + '@' + appInfo.cosmosdb_name + '.documents.azure.com:10255/' + appInfo.documentName + '?ssl=true&sslverifycertificate=false',
     options: {
       user: '',
       pass: ''
