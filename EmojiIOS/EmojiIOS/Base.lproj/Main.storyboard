@@ -51,6 +51,14 @@
                                     <outletCollection property="gestureRecognizers" destination="oXb-5t-Nif" appends="YES" id="M5f-UU-hny"/>
                                 </connections>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b87-4m-gy2">
+                                <rect key="frame" x="164" y="526" width="46" height="26"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="showAllPhotos:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Ixz-Of-kf6"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>

@@ -9,6 +9,7 @@
 import UIKit
 import Photos
 
+
 class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     @IBOutlet weak var lableField: UILabel!
@@ -64,6 +65,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
         lableField.text = "Default text"
     }
     
+    @IBAction func showAllPhotos(_ sender: UIButton) {
+        lableField.text = "All Photos"
+        let photosVC = BBAllPhotosViewController()
+        self.present(photosVC, animated: true, completion: nil)
+    }
+
    
 
 }

@@ -14,6 +14,7 @@
 		9F410D7A1F024AC60067DE1D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9F410D781F024AC60067DE1D /* LaunchScreen.storyboard */; };
 		9F410D851F024AC60067DE1D /* EmojiIOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F410D841F024AC60067DE1D /* EmojiIOSTests.swift */; };
 		9F410D901F024AC60067DE1D /* EmojiIOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F410D8F1F024AC60067DE1D /* EmojiIOSUITests.swift */; };
+		9F410D9E1F1654610067DE1D /* BBAllPhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F410D9D1F1654610067DE1D /* BBAllPhotosViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		9F410D8B1F024AC60067DE1D /* EmojiIOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EmojiIOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F410D8F1F024AC60067DE1D /* EmojiIOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiIOSUITests.swift; sourceTree = "<group>"; };
 		9F410D911F024AC60067DE1D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9F410D9D1F1654610067DE1D /* BBAllPhotosViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BBAllPhotosViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 				9F410D761F024AC60067DE1D /* Assets.xcassets */,
 				9F410D781F024AC60067DE1D /* LaunchScreen.storyboard */,
 				9F410D7B1F024AC60067DE1D /* Info.plist */,
+				9F410D9D1F1654610067DE1D /* BBAllPhotosViewController.swift */,
 			);
 			path = EmojiIOS;
 			sourceTree = "<group>";
@@ -264,6 +267,7 @@
 			files = (
 				9F410D721F024AC60067DE1D /* ViewController.swift in Sources */,
 				9F410D701F024AC60067DE1D /* AppDelegate.swift in Sources */,
+				9F410D9E1F1654610067DE1D /* BBAllPhotosViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
