@@ -22,9 +22,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
     var db:SQLiteDB!
     let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
     
-
+   
     var uriBase = "https://westcentralus.api.cognitive.microsoft.com/vision/v1.0"
     var imgPath = "http://wx4.sinaimg.cn/large/62528dc5gy1ff15pgorhgj20rs0rsn1e.jpg";
+    
     
     func asycnhronousPost(){
         let url:URL! = URL(string: uriBase + "/ocr?language=zh-Hans")
@@ -55,7 +56,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
     func connection(_ connection: NSURLConnection, didReceive data: Data) {
         print("receive data")
         print(data)
-        var res = String.init(data: data, encoding: .utf8)
+        let res = String.init(data: data, encoding: .utf8)
         print (res)
     }
     
@@ -132,6 +133,26 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
         }
         
         photoImageView.image = selectedImage
+        
+        let binaryData = UIImageJPEGRepresentation(selectedImage, 1)
+        let binaryString = binaryData?.base64EncodedData()
+        print (binaryString)
+        print(binaryData)
+        
+        let url:URL! = URL(string: uriBase + "/ocr?language=zh-Hans")
+        var urlRequest:URLRequest = URLRequest.init(url: url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 10)
+        
+        let requestParams = binaryData;
+        
+//        let requestObject = try? JSONSerialization.data(withJSONObject: requestParams, options: .prettyPrinted)
+        urlRequest.httpBody = requestParams
+        urlRequest.httpMethod = "POST"
+        urlRequest.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
+        urlRequest.setValue(subscriptionKey, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
+        
+        var conn:NSURLConnection!
+        conn = NSURLConnection.init(request: urlRequest, delegate: self)
+        conn.start()
         
         dismiss(animated: true, completion: nil)
     }
