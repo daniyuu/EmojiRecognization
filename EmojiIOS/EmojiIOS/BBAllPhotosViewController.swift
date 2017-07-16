@@ -91,6 +91,8 @@ class BBAllPhotosViewController: UIViewController, PHPhotoLibraryChangeObserver,
         let allResults = PHAsset.fetchAssets(with: allOptions)
         print(allResults.count)
         photosArray = allResults
+        print(allResults[0].location)
+        
     }
     
     func photoLibraryDidChange(_ changeInstance: PHChange) {
@@ -132,6 +134,12 @@ class BBAllPhotosViewController: UIViewController, PHPhotoLibraryChangeObserver,
             cell.imageView.image = result ?? UIImage.init(named: "defaultPhoto")
          
         })
+        
+        manager.requestImageData(for: photosArray[indexPath.row], options: nil) { (data, _, _, info) in
+            let title = (info!["PHImageFileURLKey"] as! NSURL).lastPathComponent
+
+    
+        }
         
 
         return cell

@@ -15,6 +15,10 @@
 		9F410D851F024AC60067DE1D /* EmojiIOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F410D841F024AC60067DE1D /* EmojiIOSTests.swift */; };
 		9F410D901F024AC60067DE1D /* EmojiIOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F410D8F1F024AC60067DE1D /* EmojiIOSUITests.swift */; };
 		9F410D9E1F1654610067DE1D /* BBAllPhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F410D9D1F1654610067DE1D /* BBAllPhotosViewController.swift */; };
+		9F410DA11F1B5E370067DE1D /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F410DA01F1B5E370067DE1D /* libsqlite3.0.tbd */; };
+		9F410DA61F1B64550067DE1D /* SQLiteDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F410DA51F1B64550067DE1D /* SQLiteDB.swift */; };
+		9F410DA81F1B647D0067DE1D /* SQLTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F410DA71F1B647D0067DE1D /* SQLTable.swift */; };
+		9F410DAA1F1B67110067DE1D /* data.db in Resources */ = {isa = PBXBuildFile; fileRef = 9F410DA91F1B67110067DE1D /* data.db */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +53,11 @@
 		9F410D8F1F024AC60067DE1D /* EmojiIOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiIOSUITests.swift; sourceTree = "<group>"; };
 		9F410D911F024AC60067DE1D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9F410D9D1F1654610067DE1D /* BBAllPhotosViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BBAllPhotosViewController.swift; sourceTree = "<group>"; };
+		9F410DA01F1B5E370067DE1D /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
+		9F410DA21F1B5F2C0067DE1D /* SQLite_Bridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SQLite_Bridge.h; sourceTree = "<group>"; };
+		9F410DA51F1B64550067DE1D /* SQLiteDB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteDB.swift; sourceTree = "<group>"; };
+		9F410DA71F1B647D0067DE1D /* SQLTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLTable.swift; sourceTree = "<group>"; };
+		9F410DA91F1B67110067DE1D /* data.db */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = data.db; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F410DA11F1B5E370067DE1D /* libsqlite3.0.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,10 +89,14 @@
 		9F410D631F024AC60067DE1D = {
 			isa = PBXGroup;
 			children = (
+				9F410DA91F1B67110067DE1D /* data.db */,
+				9F410DA41F1B64090067DE1D /* SQLiteDB */,
+				9F410DA21F1B5F2C0067DE1D /* SQLite_Bridge.h */,
 				9F410D6E1F024AC60067DE1D /* EmojiIOS */,
 				9F410D831F024AC60067DE1D /* EmojiIOSTests */,
 				9F410D8E1F024AC60067DE1D /* EmojiIOSUITests */,
 				9F410D6D1F024AC60067DE1D /* Products */,
+				9F410D9F1F1B5E370067DE1D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -126,6 +140,23 @@
 				9F410D911F024AC60067DE1D /* Info.plist */,
 			);
 			path = EmojiIOSUITests;
+			sourceTree = "<group>";
+		};
+		9F410D9F1F1B5E370067DE1D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9F410DA01F1B5E370067DE1D /* libsqlite3.0.tbd */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9F410DA41F1B64090067DE1D /* SQLiteDB */ = {
+			isa = PBXGroup;
+			children = (
+				9F410DA51F1B64550067DE1D /* SQLiteDB.swift */,
+				9F410DA71F1B647D0067DE1D /* SQLTable.swift */,
+			);
+			name = SQLiteDB;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -239,6 +270,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F410D7A1F024AC60067DE1D /* LaunchScreen.storyboard in Resources */,
+				9F410DAA1F1B67110067DE1D /* data.db in Resources */,
 				9F410D771F024AC60067DE1D /* Assets.xcassets in Resources */,
 				9F410D751F024AC60067DE1D /* Main.storyboard in Resources */,
 			);
@@ -266,8 +298,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F410D721F024AC60067DE1D /* ViewController.swift in Sources */,
+				9F410DA61F1B64550067DE1D /* SQLiteDB.swift in Sources */,
 				9F410D701F024AC60067DE1D /* AppDelegate.swift in Sources */,
 				9F410D9E1F1654610067DE1D /* BBAllPhotosViewController.swift in Sources */,
+				9F410DA81F1B647D0067DE1D /* SQLTable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -424,6 +458,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.EmojiIOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = SQLite_Bridge.h;
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -437,6 +472,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.EmojiIOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = SQLite_Bridge.h;
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
