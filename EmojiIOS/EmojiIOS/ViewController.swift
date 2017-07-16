@@ -26,6 +26,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
     var uriBase = "https://westcentralus.api.cognitive.microsoft.com/vision/v1.0"
     var imgPath = "http://wx4.sinaimg.cn/large/62528dc5gy1ff15pgorhgj20rs0rsn1e.jpg";
     
+    var uri: NSURL!
+    
+    
     
     func asycnhronousPost(){
         let url:URL! = URL(string: uriBase + "/ocr?language=zh-Hans")
@@ -191,23 +194,32 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        let pickedURL:NSURL = info[UIImagePickerControllerReferenceURL] as! NSURL
+        let fetchResult: PHFetchResult = PHAsset.fetchAssets(withALAssetURLs: [pickedURL as URL], options: nil)
+        
+        let asset:PHAsset = fetchResult.firstObject as! PHAsset
+        
+        PHImageManager.default()
+            .requestImageData(for: asset, options: nil, resultHandler: { (imageData, dataUTI, orientation, info) in
+                let imageNSURL: NSURL = info!["PHImageFileURLKey"] as! NSURL
+                print("imageURL: ",imageNSURL)
+                self.uri = imageNSURL
+            })
+                
+        
+        
         guard let selectedImage = info[UIImagePickerControllerOriginalImage] as? UIImage else {
             fatalError("Expected a dictionary containing an image, but was provided the following:\(info)");
         }
         
         photoImageView.image = selectedImage
-        
         let binaryData = UIImageJPEGRepresentation(selectedImage, 1)
-        let binaryString = binaryData?.base64EncodedData()
-        print (binaryString)
-        print(binaryData)
         
         let url:URL! = URL(string: uriBase + "/ocr?language=zh-Hans")
         var urlRequest:URLRequest = URLRequest.init(url: url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 10)
         
         let requestParams = binaryData;
-        
-//        let requestObject = try? JSONSerialization.data(withJSONObject: requestParams, options: .prettyPrinted)
+      
         urlRequest.httpBody = requestParams
         urlRequest.httpMethod = "POST"
         urlRequest.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
