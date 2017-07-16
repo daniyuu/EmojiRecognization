@@ -203,31 +203,33 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
             .requestImageData(for: asset, options: nil, resultHandler: { (imageData, dataUTI, orientation, info) in
                 let imageNSURL: NSURL = info!["PHImageFileURLKey"] as! NSURL
                 print("imageURL: ",imageNSURL)
-                self.uri = imageNSURL
+                let selectedImage:NSData = try! NSData.init(contentsOf: imageNSURL as URL)
+                self.photoImageView.image = UIImage.init(data: selectedImage as Data)
+            
             })
-                
         
+
         
-        guard let selectedImage = info[UIImagePickerControllerOriginalImage] as? UIImage else {
-            fatalError("Expected a dictionary containing an image, but was provided the following:\(info)");
-        }
-        
-        photoImageView.image = selectedImage
-        let binaryData = UIImageJPEGRepresentation(selectedImage, 1)
-        
-        let url:URL! = URL(string: uriBase + "/ocr?language=zh-Hans")
-        var urlRequest:URLRequest = URLRequest.init(url: url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 10)
-        
-        let requestParams = binaryData;
-      
-        urlRequest.httpBody = requestParams
-        urlRequest.httpMethod = "POST"
-        urlRequest.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
-        urlRequest.setValue(subscriptionKey, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
-        
-        var conn:NSURLConnection!
-        conn = NSURLConnection.init(request: urlRequest, delegate: self)
-        conn.start()
+//        guard let selectedImage = info[UIImagePickerControllerOriginalImage] as? UIImage else {
+//            fatalError("Expected a dictionary containing an image, but was provided the following:\(info)");
+//        }
+//        
+//        photoImageView.image = selectedImage
+//        let binaryData = UIImageJPEGRepresentation(selectedImage, 1)
+//        
+//        let url:URL! = URL(string: uriBase + "/ocr?language=zh-Hans")
+//        var urlRequest:URLRequest = URLRequest.init(url: url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 10)
+//        
+//        let requestParams = binaryData;
+//      
+//        urlRequest.httpBody = requestParams
+//        urlRequest.httpMethod = "POST"
+//        urlRequest.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
+//        urlRequest.setValue(subscriptionKey, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
+//        
+//        var conn:NSURLConnection!
+//        conn = NSURLConnection.init(request: urlRequest, delegate: self)
+//        conn.start()
         
         dismiss(animated: true, completion: nil)
     }
