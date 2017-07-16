@@ -137,8 +137,8 @@ class BBAllPhotosViewController: UIViewController, PHPhotoLibraryChangeObserver,
         
         manager.requestImageData(for: photosArray[indexPath.row], options: nil) { (data, _, _, info) in
             let title = (info!["PHImageFileURLKey"] as! NSURL).lastPathComponent
-
-    
+            print(title)
+            
         }
         
 
