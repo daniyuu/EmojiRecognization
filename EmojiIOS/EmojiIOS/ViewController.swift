@@ -9,7 +9,7 @@
 import UIKit
 import Photos
 
-class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, NSURLConnectionDataDelegate {
     
     @IBOutlet weak var lableField: UILabel!
     @IBOutlet weak var inputField: UITextField!
@@ -22,7 +22,47 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
     var db:SQLiteDB!
     let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
     
+
+    var uriBase = "https://westcentralus.api.cognitive.microsoft.com/vision/v1.0"
+    var imgPath = "http://wx4.sinaimg.cn/large/62528dc5gy1ff15pgorhgj20rs0rsn1e.jpg";
     
+    func asycnhronousPost(){
+        let url:URL! = URL(string: uriBase + "/ocr?language=zh-Hans")
+        var urlRequest:URLRequest = URLRequest.init(url: url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 10)
+        
+        let requestParams: [String:Any] = [
+            "url": imgPath
+        ]
+        
+        let requestObject = try? JSONSerialization.data(withJSONObject: requestParams, options: .prettyPrinted)
+        urlRequest.httpBody = requestObject
+        urlRequest.httpMethod = "POST"
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        urlRequest.setValue(subscriptionKey, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
+     
+        var conn:NSURLConnection!
+        conn = NSURLConnection.init(request: urlRequest, delegate: self)
+        conn.start()
+       
+      
+    }
+    
+    func connection(_ connection: NSURLConnection, didReceive response: URLResponse) {
+        print("request success")
+        print(response)
+    }
+    
+    func connection(_ connection: NSURLConnection, didReceive data: Data) {
+        print("receive data")
+        print(data)
+        var res = String.init(data: data, encoding: .utf8)
+        print (res)
+    }
+    
+    @IBAction func sendRequestButton(_ sender: UIButton) {
+        asycnhronousPost()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
