@@ -26,7 +26,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
     var uriBase = "https://westcentralus.api.cognitive.microsoft.com/vision/v1.0"
     var imgPath = "http://wx4.sinaimg.cn/large/62528dc5gy1ff15pgorhgj20rs0rsn1e.jpg";
     
-    var uri: NSURL!
+    var uri: String!
     
     
     
@@ -75,12 +75,18 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
         db = SQLiteDB.shared
         _ = db.openDB()
         
-        let result = db.execute(sql: "create table if not exists t_user(uid integer primary key,uname varchar(20),mobile varchar(20))")
+
+        let result = db.execute(sql: "create table if not exists t_emoji_v1(uid integer primary key,imgPath varchar(255),tag varchar(255))")
         print(result)
-
-        
+//        dropTable()
     }
-
+    
+    func dropTable(){
+        let result = db.execute(sql: "DROP TABLE t_emoji_v1")
+        print("drop table: ", result)
+    }
+    
+    
     @IBAction func getAllPhotoButton(_ sender: UIButton) {
         getAllPhotos()
     }
@@ -154,6 +160,29 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
         }
     }
     
+    func searchPhotoByTag() {
+        let tag = self.inputDataField.text!
+        let data = db.query(sql: "select * from t_emoji_v1 where tag='\(tag)'")
+        if data.count > 0 {
+            let info = data[data.count - 1]
+            let imgPath = info["imgPath"] as! String
+            let imageNSURL = NSURL.init(string: imgPath as! String)
+            print("search result: ", imageNSURL)
+            let selectedImage:NSData = try! NSData.init(contentsOf: imageNSURL as! URL)
+            self.photoImageView.image = UIImage.init(data: selectedImage as Data)
+        }
+    }
+    
+    func saveTag() {
+        let tag = self.inputField.text!
+//        let imgPath = self.uri as String
+        let imgPath = self.uri as! String
+        let sql = "insert into t_emoji_v1(imgPath,tag) values('\(imgPath)','\(tag)')"
+        print("sql: \(sql)")
+        let result = db.execute(sql: sql)
+        print(result)
+    }
+    
     func saveUser() {
         let uname = self.inputDataField.text!
         let mobile = "12345678"
@@ -172,7 +201,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
     }
 
     func textFieldDidEndEditing(_ textField: UITextField) {
-        lableField.text = inputField.text
+//        lableField.text = inputField.text
     }
 
     
@@ -203,6 +232,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
             .requestImageData(for: asset, options: nil, resultHandler: { (imageData, dataUTI, orientation, info) in
                 let imageNSURL: NSURL = info!["PHImageFileURLKey"] as! NSURL
                 print("imageURL: ",imageNSURL)
+                self.uri = imageNSURL.absoluteString as! String
                 let selectedImage:NSData = try! NSData.init(contentsOf: imageNSURL as URL)
                 self.photoImageView.image = UIImage.init(data: selectedImage as Data)
             
@@ -235,23 +265,23 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
     }
     
     @IBAction func setDefaultLabelText(_ sender: UIButton) {
-        lableField.text = "Default text"
+//        lableField.text = "Default text"
     }
     
     @IBAction func showAllPhotos(_ sender: UIButton) {
-        lableField.text = "All Photos"
+//        lableField.text = "All Photos"
         let photosVC = BBAllPhotosViewController()
         self.present(photosVC, animated: true, completion: nil)
     }
     
     @IBAction func saveData(_ sender: UIButton) {
         print("saveData")
-        saveUser()
+        saveTag()
     }
 
     @IBAction func showData(_ sender: UIButton) {
         print("showData")
-        showUser()
+        searchPhotoByTag()
     }
    
 
