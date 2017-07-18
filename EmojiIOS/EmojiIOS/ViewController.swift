@@ -27,8 +27,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
     var imgPath = "http://wx4.sinaimg.cn/large/62528dc5gy1ff15pgorhgj20rs0rsn1e.jpg";
     
     var uri: String!
+    var photosArray = PHFetchResult<PHAsset>()
+    var photoIndex = 0
     
-    
+    var statusCode = 200
     
     func asycnhronousPost(){
         let url:URL! = URL(string: uriBase + "/ocr?language=zh-Hans")
@@ -53,13 +55,31 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
     func connection(_ connection: NSURLConnection, didReceive response: URLResponse) {
         print("request success")
         print(response)
+        let httpResponse = response as! HTTPURLResponse
+        statusCode = httpResponse.statusCode
+        print (statusCode)
     }
     
     func connection(_ connection: NSURLConnection, didReceive data: Data) {
         print("receive data")
         print(data)
         let res = String.init(data: data, encoding: .utf8)
+        print(self.uri)
         print (res)
+        var resData = res?.data(using: .utf8)
+        var resJson = try? JSONSerialization.jsonObject(with: resData!) as! [String: Any]
+        if (statusCode == 200) {
+            var regions = resJson?["regions"] as! [Any]
+            print (regions)
+            
+        }
+        
+        
+        photoIndex += 1
+        if (photoIndex < photosArray.count){
+            getPhotoDescription(photoAsset: photosArray[photoIndex])
+        }
+        
     }
     
     @IBAction func sendRequestButton(_ sender: UIButton) {
@@ -89,10 +109,51 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
     
     @IBAction func getAllPhotoButton(_ sender: UIButton) {
         getAllPhotos()
+        getPhotoDescription(photoAsset: photosArray[photoIndex])
+    }
+    
+    private func getPhotoDescription(photoAsset: PHAsset){
+        let manager = PHImageManager.default();
+        let option = PHImageRequestOptions()
+        option.isSynchronous = true
+        
+        manager.requestImage(for: photoAsset, targetSize: CGSize.zero, contentMode: .aspectFit, options: option, resultHandler: {(result, info)->Void  in
+            let selectedImage = result;
+            
+            manager.requestImageData(for: photoAsset, options: nil) { (data, _, _, info) in
+                let nsurl = info!["PHImageFileURLKey"] as! NSURL
+                self.uri = nsurl.absoluteString as! String
+                let subscriptionKey = "c3a5d67bf4c34e8fa133e1c1fcf487d2"
+                let uriBase = "https://westcentralus.api.cognitive.microsoft.com/vision/v1.0"
+                
+                let binaryData = UIImageJPEGRepresentation(selectedImage!, 1)
+                let binaryString = binaryData?.base64EncodedData()
+                
+                let url:URL! = URL(string: uriBase + "/ocr?language=zh-Hans")
+                var urlRequest:URLRequest = URLRequest.init(url: url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 10)
+                
+                let requestParams = binaryData;
+                
+                urlRequest.httpBody = requestParams
+                urlRequest.httpMethod = "POST"
+                urlRequest.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
+                urlRequest.setValue(subscriptionKey, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
+                
+                var conn:NSURLConnection!
+                conn = NSURLConnection.init(request: urlRequest, delegate: self)
+                conn.start()
+                
+                
+            }
+            
+            
+        })
+
+        
     }
     
     private func getAllPhotos(){
-        var photosArray = PHFetchResult<PHAsset>()
+        
         PHPhotoLibrary.shared().register(self)
         
         let allOptions = PHFetchOptions()
@@ -103,46 +164,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
         print(allResults.count)
         photosArray = allResults
         
-        let manager = PHImageManager.default();
-        let option = PHImageRequestOptions()
-        option.isSynchronous = true
-        for  i in  0...allResults.count-1 {
-            manager.requestImage(for: photosArray[i], targetSize: CGSize.zero, contentMode: .aspectFit, options: option, resultHandler: {(result, info)->Void  in
-//            cell.imageView.image = result ?? UIImage.init(named: "defaultPhoto")
-                let selectedImage = result;
-                
-                let subscriptionKey = "c3a5d67bf4c34e8fa133e1c1fcf487d2"
-                let uriBase = "https://westcentralus.api.cognitive.microsoft.com/vision/v1.0"
-                
-                let binaryData = UIImageJPEGRepresentation(selectedImage!, 1)
-                let binaryString = binaryData?.base64EncodedData()
-                print (binaryString)
-                print(binaryData)
-                
-                let url:URL! = URL(string: uriBase + "/ocr?language=zh-Hans")
-                var urlRequest:URLRequest = URLRequest.init(url: url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 10)
-                
-                let requestParams = binaryData;
-                
-                //        let requestObject = try? JSONSerialization.data(withJSONObject: requestParams, options: .prettyPrinted)
-                urlRequest.httpBody = requestParams
-                urlRequest.httpMethod = "POST"
-                urlRequest.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
-                urlRequest.setValue(subscriptionKey, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
-                
-                var conn:NSURLConnection!
-                conn = NSURLConnection.init(request: urlRequest, delegate: self)
-                conn.start()
-
-            
-            })
-        
-            manager.requestImageData(for: photosArray[i], options: nil) { (data, _, _, info) in
-                let title = (info!["PHImageFileURLKey"] as! NSURL).lastPathComponent
-                print(title)
-            
-            }
-        }
+        getPhotoDescription(photoAsset: photosArray[0])
         
         
     }
@@ -235,6 +257,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
                 self.uri = imageNSURL.absoluteString as! String
                 let selectedImage:NSData = try! NSData.init(contentsOf: imageNSURL as URL)
                 self.photoImageView.image = UIImage.init(data: selectedImage as Data)
+                
+                
             
             })
         
