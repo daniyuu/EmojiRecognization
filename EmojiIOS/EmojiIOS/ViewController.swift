@@ -89,7 +89,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
             
         }
         
-        
         photoIndex += 1
         if (photoIndex < photosArray.count){
             getPhotoDescription(photoAsset: photosArray[photoIndex])
@@ -293,7 +292,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
     
     @IBAction func saveData(_ sender: UIButton) {
         print("saveData")
-//        saveTag()
+        let tag = self.inputField.text!
+        saveTag(content: tag)
     }
 
     @IBAction func showData(_ sender: UIButton) {
