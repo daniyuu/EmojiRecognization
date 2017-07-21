@@ -54,23 +54,38 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
     
     func connection(_ connection: NSURLConnection, didReceive response: URLResponse) {
         print("request success")
-        print(response)
+//        print(response)
         let httpResponse = response as! HTTPURLResponse
         statusCode = httpResponse.statusCode
-        print (statusCode)
+
     }
     
     func connection(_ connection: NSURLConnection, didReceive data: Data) {
-        print("receive data")
-        print(data)
+        var content = "";
         let res = String.init(data: data, encoding: .utf8)
-        print(self.uri)
-        print (res)
-        var resData = res?.data(using: .utf8)
+        let resData = res?.data(using: .utf8)
         var resJson = try? JSONSerialization.jsonObject(with: resData!) as! [String: Any]
         if (statusCode == 200) {
-            var regions = resJson?["regions"] as! [Any]
-            print (regions)
+            let regions = resJson?["regions"] as! [[String:AnyObject]]
+            let data = regions
+            
+            for item in data {
+                let lines = item["lines"] as! [[String:AnyObject]]
+                for line in lines {
+                    let words = line["words"] as! [[String:String]]
+                    for word in words {
+                        let text = word["text"]!
+                        content += text
+                    }
+                    
+                }
+                
+            }
+            if(content.characters.count > 1) {
+                print(content)
+                saveTag(content: content)
+            }
+            
             
         }
         
@@ -97,7 +112,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
         
 
         let result = db.execute(sql: "create table if not exists t_emoji_v1(uid integer primary key,imgPath varchar(255),tag varchar(255))")
-        print(result)
+//        print(result)
 //        dropTable()
     }
     
@@ -161,7 +176,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
         allOptions.sortDescriptors = [NSSortDescriptor.init(key: "creationDate", ascending: true)]
         
         let allResults = PHAsset.fetchAssets(with: allOptions)
-        print(allResults.count)
+//        print(allResults.count)
         photosArray = allResults
         
         getPhotoDescription(photoAsset: photosArray[0])
@@ -189,15 +204,15 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
             let info = data[data.count - 1]
             let imgPath = info["imgPath"] as! String
             let imageNSURL = NSURL.init(string: imgPath as! String)
-            print("search result: ", imageNSURL)
+//            print("search result: ", imageNSURL)
             let selectedImage:NSData = try! NSData.init(contentsOf: imageNSURL as! URL)
             self.photoImageView.image = UIImage.init(data: selectedImage as Data)
         }
     }
     
-    func saveTag() {
-        let tag = self.inputField.text!
-//        let imgPath = self.uri as String
+    func saveTag(content: String) {
+//        let tag = self.inputField.text!
+        let tag = content
         let imgPath = self.uri as! String
         let sql = "insert into t_emoji_v1(imgPath,tag) values('\(imgPath)','\(tag)')"
         print("sql: \(sql)")
@@ -253,7 +268,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
         PHImageManager.default()
             .requestImageData(for: asset, options: nil, resultHandler: { (imageData, dataUTI, orientation, info) in
                 let imageNSURL: NSURL = info!["PHImageFileURLKey"] as! NSURL
-                print("imageURL: ",imageNSURL)
+//                print("imageURL: ",imageNSURL)
                 self.uri = imageNSURL.absoluteString as! String
                 let selectedImage:NSData = try! NSData.init(contentsOf: imageNSURL as URL)
                 self.photoImageView.image = UIImage.init(data: selectedImage as Data)
@@ -262,28 +277,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
             
             })
         
-
-        
-//        guard let selectedImage = info[UIImagePickerControllerOriginalImage] as? UIImage else {
-//            fatalError("Expected a dictionary containing an image, but was provided the following:\(info)");
-//        }
-//        
-//        photoImageView.image = selectedImage
-//        let binaryData = UIImageJPEGRepresentation(selectedImage, 1)
-//        
-//        let url:URL! = URL(string: uriBase + "/ocr?language=zh-Hans")
-//        var urlRequest:URLRequest = URLRequest.init(url: url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 10)
-//        
-//        let requestParams = binaryData;
-//      
-//        urlRequest.httpBody = requestParams
-//        urlRequest.httpMethod = "POST"
-//        urlRequest.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
-//        urlRequest.setValue(subscriptionKey, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
-//        
-//        var conn:NSURLConnection!
-//        conn = NSURLConnection.init(request: urlRequest, delegate: self)
-//        conn.start()
         
         dismiss(animated: true, completion: nil)
     }
@@ -300,7 +293,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
     
     @IBAction func saveData(_ sender: UIButton) {
         print("saveData")
-        saveTag()
+//        saveTag()
     }
 
     @IBAction func showData(_ sender: UIButton) {
