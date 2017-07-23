@@ -205,7 +205,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
             let imageNSURL = NSURL.init(string: imgPath as! String)
 //            print("search result: ", imageNSURL)
             let selectedImage:NSData = try! NSData.init(contentsOf: imageNSURL as! URL)
-            self.photoImageView.image = UIImage.init(data: selectedImage as Data)
+            photoImageView.image = UIImage.init(data: selectedImage as Data)
         }
     }
     
@@ -259,6 +259,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage{
+            photoImageView.image = image
+        }else{
+            print("picj umage wrong")
+        }
+        
         let pickedURL:NSURL = info[UIImagePickerControllerReferenceURL] as! NSURL
         let fetchResult: PHFetchResult = PHAsset.fetchAssets(withALAssetURLs: [pickedURL as URL], options: nil)
         
@@ -269,8 +275,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
                 let imageNSURL: NSURL = info!["PHImageFileURLKey"] as! NSURL
 //                print("imageURL: ",imageNSURL)
                 self.uri = imageNSURL.absoluteString as! String
-                let selectedImage:NSData = try! NSData.init(contentsOf: imageNSURL as URL)
-                self.photoImageView.image = UIImage.init(data: selectedImage as Data)
+//                let selectedImage:NSData = try! NSData.init(contentsOf: imageNSURL as URL)
+//                self.photoImageView.image = UIImage.init(data: selectedImage as Data)
                 
                 
             
