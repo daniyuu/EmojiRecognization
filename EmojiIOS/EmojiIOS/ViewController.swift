@@ -204,8 +204,16 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
             let imgPath = info["imgPath"] as! String
             let imageNSURL = NSURL.init(string: imgPath as! String)
 //            print("search result: ", imageNSURL)
-            let selectedImage:NSData = try! NSData.init(contentsOf: imageNSURL as! URL)
-            photoImageView.image = UIImage.init(data: selectedImage as Data)
+            
+            DispatchQueue.main.async {
+                let selectedImage:NSData = try! NSData.init(contentsOf: imageNSURL as! URL)
+//                        self.profileImageView?.image = UIImage(data: imageData as Data)
+                self.photoImageView.image = UIImage.init(data: selectedImage as Data)
+                
+                
+            }
+//            photoImageView.image = UIImage.init(data: selectedImage as Data)
+    
         }
     }
     
